@@ -6,17 +6,16 @@ const setupKafka = async (context) => {
   before(async function () {
     this.timeout(30000)
     const kafka = new Kafka({
-      clientId: 'wasp-payload-parser-template-tests',
+      clientId: 'wasp-deti-power-tests',
       brokers: ['localhost:9092'],
       logLevel: kafkaLogLevels.NOTHING,
     })
     const producer = kafka.producer()
     await producer.connect()
 
-    const consumer = kafka.consumer({ groupId: 'wasp-payload-parser-template-tests' })
+    const consumer = kafka.consumer({ groupId: 'wasp-deti-power-tests' })
     await consumer.connect()
     await consumer.subscribe({ topic: 'readings', fromBeginning: false })
-    await consumer.subscribe({ topic: 'events', fromBeginning: false })
 
     const messages = new Map()
     await consumer.run({
@@ -29,7 +28,6 @@ const setupKafka = async (context) => {
       publishAndWaitForResults: async (producerTopic, message, waitCount) => {
         messages.clear()
         messages.set('readings', [])
-        messages.set('events', [])
 
         await producer.send({
           topic: producerTopic,
@@ -62,4 +60,4 @@ const setupKafka = async (context) => {
   })
 }
 
-module.exports = { setupKafka }
+module.exports = setupKafka

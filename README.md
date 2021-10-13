@@ -1,29 +1,33 @@
-# wasp-payload-parser-template
+# wasp-deti-power
 
-Template repository for bootstrapping new WASP payload parsers. Use this repo as a template in GitHub when creating new `WASP` payload parsers. When forked a new pull request will automatically be created in the new repository to apply templating. A release workflow will run on merging.
+Uses [`wasp-payload-processor`](https://github.com/digicatapult/wasp-payload-processor) to build a payload processing service for Schneider power meters.
 
-## What this repo provides
-
-This repo provides:
-
-- basic node.js project structure for a WASP payload parser
-- linting with WASP prettier configuration
-- open-sourcing materials
-- Docker file
-- A simple helm chart for the payload parser
-- Testing apparatus using `mocha`, `chai` and `supertest`
-- Github workflows for testing and release
+Example payload:
+```
+{
+  "sentOn": 1620256786756,
+  "metrics": {
+    "CurrentAvg": 1.5844479,
+    "TotalActiveEnergyDelivered": 1146.397,
+    "ActivePowerTotal_timestamp": 1620256786755,
+    "TotalActiveEnergyDelivered_timestamp": 1620256786724,
+    "assetName": "Schneider5111-id2",
+    "CurrentAvg_timestamp": 1620256786739,
+    "ActivePowerTotal": 1.157379
+  }
+}
+```
 
 ## Getting started
 
-`wasp-payload-parser-template` can be run in a similar way to most nodejs applications. First install required dependencies using `npm`:
+`wasp-deti-power` can be run in a similar way to most nodejs applications. First install required dependencies using `npm`:
 
 ```sh
 npm install
 ```
 
 ### Testing
-For integration testing, `wasp-payload-parser-template` depends on Kafka and Zookeeper. These can be brought locally up using docker:
+For integration testing, `wasp-deti-power` depends on Kafka and Zookeeper. These can be brought locally up using docker:
 
 ```sh
 docker-compose up -d
@@ -37,20 +41,48 @@ npm test
 
 ## Environment Variables
 
-`wasp-payload-parser-template` is configured primarily using environment variables as follows:
+`wasp-deti-power` is configured primarily using environment variables as follows:
 
-| variable         | required |            default             | description                                        |
-| :--------------- | :------: | :----------------------------: | :------------------------------------------------- |
-| WASP_SENSOR_TYPE |    N     | `wasp-payload-parser-template` | Type of this sensor/thing for `wasp-thing-service` |
+| variable                    | required |        default        | description                                                                          |
+| :-------------------------- | :------: | :-------------------: | :----------------------------------------------------------------------------------- |
+| WASP_SENSOR_TYPE            |    N     |      `detiPower`      | Type of this sensor/thing for `wasp-thing-service`                                   |
 
 The following environment variables configure the use of [`wasp-payload-processor`](https://github.com/digicatapult/wasp-payload-processor):
 
-| variable                     | required |     default      | description                                                                             |
-| :--------------------------- | :------: | :--------------: | :-------------------------------------------------------------------------------------- |
-| PORT                         |    N     |      `3000`      | Port on which the service will listen                                                   |
-| LOG_LEVEL                    |    N     |      `info`      | Logging level. Valid values are [`trace`, `debug`, `info`, `warn`, `error`, `fatal`]    |
-| KAFKA_LOG_LEVEL              |    N     |    `nothing`     | Logging level for Kafka. Valid values are [`debug`, `info`, `warn`, `error`, `nothing`] |
-| KAFKA_BROKERS                |    N     | `localhost:9092` | List of addresses for the Kafka brokers                                                 |
-| KAFKA_READINGS_TOPIC         |    N     |    `readings`    | Outgoing Kafka topic for readings                                                       |
-| KAFKA_EVENTS_TOPIC           |    N     |     `events`     | Outgoing Kafka topic for events                                                         |
-| KAFKA_PAYLOAD_ROUTING_PREFIX |    N     |    `payloads`    | Prefix for incoming Kafka topics for payloads                                           |
+| variable                    | required |     default     | description                                                                             |
+| :-------------------------- | :------: | :-------------: | :-------------------------------------------------------------------------------------- |
+| PORT                        |    N     |      `3000`     | Port on which the service will listen                                                   |
+| LOG_LEVEL                   |    N     |      `info`     | Logging level. Valid values are [`trace`, `debug`, `info`, `warn`, `error`, `fatal`]    |
+| KAFKA_LOG_LEVEL             |    N     |    `nothing`    | Logging level for Kafka. Valid values are [`debug`, `info`, `warn`, `error`, `nothing`] |
+| KAFKA_BROKERS               |    N     | `localhost:9092`| List of addresses for the Kafka brokers                                                 |
+| KAFKA_READINGS_TOPIC        |    N     |   `readings`    | Outgoing Kafka topic for readings                                                       |
+| KAFKA_PAYLOAD_ROUTING_PREFIX|    N     |   `payloads`    | Prefix for incoming Kafka topics for payloads                                           |
+
+## Helm/Kubernetes
+
+Install `minikube` and `helm` using Homebrew, then start `minikube` and update helm dependencies:
+```
+brew install minikube helm
+minikube start
+helm dependency update helm/wasp-deti-power
+```
+
+Eval is required to provide helm with visibility for your local docker image repository:
+```
+eval $(minikube docker-env)
+```
+
+Build the docker image (change `src=` to point to your local github token):
+```
+DOCKER_BUILDKIT=1 docker build -t wasp-deti-power:latest --secret id=github,src=<path/to/your/github_token> .
+```
+
+To run/deploy the application on kubernetes via helm charts use the following `ct-values.yaml` with the corresponding overrides:
+```
+helm install wasp-deti-power helm/wasp-deti-power -f helm/wasp-deti-power/ci/ct-values.yaml
+```
+
+Check the pods are running successfully using:
+```
+kubectl get pods -A
+```

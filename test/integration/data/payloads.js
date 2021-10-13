@@ -1,140 +1,153 @@
-const DUMMY_READING_PAYLOAD_1 = (messageTimestamp) => ({
-  message: {
-    key: '00000000-0000-0000-0000-000000000000',
-    value: JSON.stringify({
-      thingId: '00000000-0000-0000-0000-000000000000',
-      type: 'dummy_thing_type',
-      ingest: 'dummy_ingest',
-      ingestId: 'dummy_ingest_id',
-      timestamp: messageTimestamp,
-      payload: {
-        appId: 'DUMMY_READING',
-        data: '20.9',
-        messageType: 'DATA',
-      },
-      metadata: {},
-    }),
-  },
-  expectedReadings: [
-    {
-      dataset: {
-        thingId: '00000000-0000-0000-0000-000000000000',
-        type: 'dummy_type',
-        label: 'dummy_label',
-        unit: 'dummy_unit',
-      },
-      timestamp: messageTimestamp,
-      value: 20.9,
-    },
-  ],
-  expectedEvents: [],
-})
-
-const DUMMY_READING_PAYLOAD_2 = (messageTimestamp) => ({
-  message: {
-    key: '00000000-0000-0000-0000-000000000000',
-    value: JSON.stringify({
-      thingId: '00000000-0000-0000-0000-000000000000',
-      type: 'dummy_thing_type',
-      ingest: 'dummy_ingest',
-      ingestId: 'dummy_ingest_id',
-      timestamp: messageTimestamp,
-      payload: {
-        appId: 'DUMMY_READING',
-        data: '70.9',
-        messageType: 'DATA',
-      },
-      metadata: {},
-    }),
-  },
-  expectedReadings: [
-    {
-      dataset: {
-        thingId: '00000000-0000-0000-0000-000000000000',
-        type: 'dummy_type',
-        label: 'dummy_label',
-        unit: 'dummy_unit',
-      },
-      timestamp: messageTimestamp,
-      value: 70.9,
-    },
-  ],
-})
-
-const DUMMY_EVENT_PAYLOAD = (messageTimestamp) => ({
-  message: {
-    key: '00000000-0000-0000-0000-000000000000',
-    value: JSON.stringify({
-      thingId: '00000000-0000-0000-0000-000000000000',
-      type: 'dummy_thing_type',
-      ingest: 'dummy_ingest',
-      ingestId: 'dummy_ingest_id',
-      timestamp: messageTimestamp,
-      payload: {
-        appId: 'DUMMY_EVENT',
-        data: 'DUMMY_EVENT_DATA',
-        messageType: 'DATA',
-      },
-      metadata: {},
-    }),
-  },
-  expectedReadings: [],
-  expectedEvents: [
-    {
-      thingId: '00000000-0000-0000-0000-000000000000',
-      timestamp: messageTimestamp,
-      type: 'dummy_event_type',
-      details: {},
-    },
-  ],
-})
-
-const UNEXPECTED_MESSAGE_TYPE_PAYLOAD = (messageTimestamp) => ({
-  message: {
-    key: '00000000-0000-0000-0000-000000000000',
-    value: JSON.stringify({
-      thingId: '00000000-0000-0000-0000-000000000000',
-      type: 'dummy_thing_type',
-      ingest: 'dummy_ingest',
-      ingestId: 'dummy_ingest_id',
-      timestamp: messageTimestamp,
-      payload: {
-        appId: 'UNEXPECTED',
-        data: '20.0',
-        messageType: 'invalid',
-      },
-      metadata: {},
-    }),
-  },
-  expectedReadings: [],
-  expectedEvents: [],
-})
-
-const UNEXPECTED_APP_ID_PAYLOAD = (messageTimestamp) => ({
-  message: {
-    key: '00000000-0000-0000-0000-000000000000',
-    value: JSON.stringify({
-      thingId: '00000000-0000-0000-0000-000000000000',
-      type: 'dummy_thing_type',
-      ingest: 'dummy_ingest',
-      ingestId: 'dummy_ingest_id',
-      timestamp: messageTimestamp,
-      payload: {
-        appId: 'invalid',
-        data: '',
-        messageType: 'DATA',
-      },
-      metadata: {},
-    }),
-  },
-  expectedReadings: [],
-  expectedEvents: [],
-})
-
 module.exports = {
-  DUMMY_READING_PAYLOAD_1,
-  DUMMY_READING_PAYLOAD_2,
-  DUMMY_EVENT_PAYLOAD,
-  UNEXPECTED_MESSAGE_TYPE_PAYLOAD,
-  UNEXPECTED_APP_ID_PAYLOAD,
+  READING_PAYLOAD_1: {
+    message: {
+      key: '00000000-0000-0000-0000-000000000000',
+      value: JSON.stringify({
+        thingId: '00000000-0000-0000-0000-000000000000',
+        type: 'detiPower',
+        ingest: 'mqtt',
+        ingestId: '574bd77c-4aba-4557-aa9e-066939f938cc',
+        timestamp: '',
+        payload: {
+          sentOn: 1620256786756,
+          metrics: {
+            CurrentAvg: 1.5844479,
+            TotalActiveEnergyDelivered: 1146.397,
+            ActivePowerTotal_timestamp: 1620256786755,
+            TotalActiveEnergyDelivered_timestamp: 1620256786724,
+            assetName: 'Schneider5111-id2',
+            CurrentAvg_timestamp: 1620256786739,
+            ActivePowerTotal: 1.157379,
+          },
+        },
+        metadata: {},
+      }),
+    },
+    expectedReadings: [
+      {
+        dataset: {
+          thingId: '00000000-0000-0000-0000-000000000000',
+          type: 'active_power_total',
+          label: 'Schneider5111-id2',
+          unit: 'kW',
+        },
+        timestamp: '2021-05-05T23:19:46.755Z',
+        value: 1.157379,
+      },
+      {
+        dataset: {
+          thingId: '00000000-0000-0000-0000-000000000000',
+          type: 'total_active_energy_delivered',
+          label: 'Schneider5111-id2',
+          unit: 'kWh',
+        },
+        timestamp: '2021-05-05T23:19:46.724Z',
+        value: 1146.397,
+      },
+      {
+        dataset: {
+          thingId: '00000000-0000-0000-0000-000000000000',
+          type: 'current_avg',
+          label: 'Schneider5111-id2',
+          unit: 'A',
+        },
+        timestamp: '2021-05-05T23:19:46.739Z',
+        value: 1.5844479,
+      },
+    ],
+  },
+  NO_METRICS_PAYLOAD: {
+    message: {
+      key: '00000000-0000-0000-0000-000000000000',
+      value: JSON.stringify({
+        thingId: '00000000-0000-0000-0000-000000000000',
+        type: 'detiPower',
+        ingest: 'mqtt',
+        ingestId: '574bd77c-4aba-4557-aa9e-066939f938cc',
+        timestamp: '',
+        payload: {
+          sentOn: 1620256786756,
+        },
+        metadata: {},
+      }),
+    },
+    expectedReadings: [],
+  },
+  TIMER_PAYLOAD: {
+    message: {
+      key: '00000000-0000-0000-0000-000000000000',
+      value: JSON.stringify({
+        thingId: '00000000-0000-0000-0000-000000000000',
+        type: 'detiPower',
+        ingest: 'mqtt',
+        ingestId: '574bd77c-4aba-4557-aa9e-066939f938cc',
+        timestamp: '',
+        payload: {
+          sentOn: 1620256786693,
+          metrics: { TIMER: 1620256786693 },
+        },
+        metadata: {},
+      }),
+    },
+    expectedReadings: [],
+  },
+  NO_ASSET_NAME_PAYLOAD: {
+    message: {
+      key: '00000000-0000-0000-0000-000000000000',
+      value: JSON.stringify({
+        thingId: '00000000-0000-0000-0000-000000000000',
+        type: 'detiPower',
+        ingest: 'mqtt',
+        ingestId: '574bd77c-4aba-4557-aa9e-066939f938cc',
+        timestamp: '',
+        payload: {
+          sentOn: 1620256786756,
+          metrics: {
+            CurrentAvg: 1.5844479,
+            TotalActiveEnergyDelivered: 1146.397,
+            ActivePowerTotal_timestamp: 1620256786755,
+            TotalActiveEnergyDelivered_timestamp: 1620256786724,
+            CurrentAvg_timestamp: 1620256786739,
+            ActivePowerTotal: 1.157379,
+          },
+        },
+        metadata: {},
+      }),
+    },
+    expectedReadings: [],
+  },
+  METRIC_WITHOUT_TIMESTAMP_PAYLOAD: {
+    message: {
+      key: '00000000-0000-0000-0000-000000000000',
+      value: JSON.stringify({
+        thingId: '00000000-0000-0000-0000-000000000000',
+        type: 'detiPower',
+        ingest: 'mqtt',
+        ingestId: '574bd77c-4aba-4557-aa9e-066939f938cc',
+        timestamp: '',
+        payload: {
+          sentOn: 1620256786756,
+          metrics: {
+            CurrentAvg: 1.5844479,
+            TotalActiveEnergyDelivered: 1146.397,
+            TotalActiveEnergyDelivered_timestamp: 1620256786724,
+            assetName: 'Schneider5111-id2',
+          },
+        },
+        metadata: {},
+      }),
+    },
+    expectedReadings: [
+      {
+        dataset: {
+          thingId: '00000000-0000-0000-0000-000000000000',
+          type: 'total_active_energy_delivered',
+          label: 'Schneider5111-id2',
+          unit: 'kWh',
+        },
+        timestamp: '2021-05-05T23:19:46.724Z',
+        value: 1146.397,
+      },
+    ],
+  },
 }

@@ -1,16 +1,15 @@
 const { describe, before, it } = require('mocha')
-const { expect } = require('chai')
-const moment = require('moment')
 const { setupServer } = require('./helpers/server')
-const { setupKafka } = require('./helpers/kafka')
+const setupKafka = require('./helpers/kafka')
+const { assertReadings } = require('./helpers/readings')
 const { WASP_SENSOR_TYPE } = require('../../app/env')
 
 const {
-  DUMMY_READING_PAYLOAD_1,
-  DUMMY_READING_PAYLOAD_2,
-  DUMMY_EVENT_PAYLOAD,
-  UNEXPECTED_MESSAGE_TYPE_PAYLOAD,
-  UNEXPECTED_APP_ID_PAYLOAD,
+  READING_PAYLOAD_1,
+  NO_METRICS_PAYLOAD,
+  TIMER_PAYLOAD,
+  NO_ASSET_NAME_PAYLOAD,
+  METRIC_WITHOUT_TIMESTAMP_PAYLOAD,
 } = require('./data/payloads')
 
 describe('message Processing', function () {
@@ -18,12 +17,9 @@ describe('message Processing', function () {
   setupServer(context)
   setupKafka(context)
 
-  const singlePayloadTest = ({ context, description, payloadTemplate, expectation }) => {
+  const singlePayloadTest = ({ context, description, payload, expectation }) => {
     describe(description, function () {
-      let payload
-
       before(async function () {
-        payload = payloadTemplate(new Date().toISOString())
         context.result = await context.kafka.publishAndWaitForResults(
           `payloads.${WASP_SENSOR_TYPE}`,
           payload.message,
@@ -33,9 +29,7 @@ describe('message Processing', function () {
 
       it(expectation, function () {
         const readings = context.result.get('readings')
-        expect(readings).to.deep.equal(payload.expectedReadings)
-        const events = context.result.get('events')
-        expect(events).to.deep.equal(payload.expectedEvents)
+        assertReadings(readings, payload.expectedReadings)
       })
     })
   }
@@ -44,67 +38,37 @@ describe('message Processing', function () {
     singlePayloadTest({
       context,
       description: 'single reading',
-      payloadTemplate: DUMMY_READING_PAYLOAD_1,
-      expectation: 'should forward the correct reading',
-    })
-    singlePayloadTest({
-      context,
-      description: 'single reading',
-      payloadTemplate: DUMMY_READING_PAYLOAD_1,
+      payload: READING_PAYLOAD_1,
       expectation: 'should forward the correct reading',
     })
 
     singlePayloadTest({
       context,
-      description: 'dummy event',
-      payloadTemplate: DUMMY_EVENT_PAYLOAD,
-      expectation: 'should forward the correct event',
-    })
-
-    describe('multiple readings', function () {
-      let payloadOne
-      let payloadTwo
-
-      before(async function () {
-        const timestampOne = moment().subtract(2, 'day').toISOString()
-        payloadOne = DUMMY_READING_PAYLOAD_1(timestampOne)
-        context.resultOne = await context.kafka.publishAndWaitForResults(
-          `payloads.${WASP_SENSOR_TYPE}`,
-          payloadOne.message,
-          1
-        )
-
-        const timestampTwo = moment().subtract(1, 'day').toISOString()
-        payloadTwo = DUMMY_READING_PAYLOAD_2(timestampTwo)
-        context.resultTwo = await context.kafka.publishAndWaitForResults(
-          `payloads.${WASP_SENSOR_TYPE}`,
-          payloadTwo.message,
-          1
-        )
-      })
-
-      it('should forward the correct readings', function () {
-        const readingsResultOne = context.resultOne.get('readings')
-        expect(readingsResultOne).to.deep.equal(payloadOne.expectedReadings)
-
-        const readingsResultTwo = context.resultTwo.get('readings')
-        expect(readingsResultTwo).to.deep.equal(payloadTwo.expectedReadings)
-      })
+      description: 'no corresponding timestamp for metric',
+      payload: METRIC_WITHOUT_TIMESTAMP_PAYLOAD,
+      expectation: 'should still store other readings in payload',
     })
   })
 
-  describe('unexpected payloads', function () {
+  describe('invalid payloads', function () {
     singlePayloadTest({
       context,
-      description: 'unexpected message type',
-      payloadTemplate: UNEXPECTED_MESSAGE_TYPE_PAYLOAD,
+      description: 'no metrics',
+      payload: NO_METRICS_PAYLOAD,
       expectation: 'should not forward',
     })
 
     singlePayloadTest({
       context,
-      description: 'unexpected app ID',
-      payloadTemplate: UNEXPECTED_APP_ID_PAYLOAD,
+      description: 'TIMER payload',
+      payload: TIMER_PAYLOAD,
+      expectation: 'should not forward',
+    })
+
+    singlePayloadTest({
+      context,
+      description: 'no assetName',
+      payload: NO_ASSET_NAME_PAYLOAD,
       expectation: 'should not forward',
     })
   })

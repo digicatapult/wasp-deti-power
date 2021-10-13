@@ -4,7 +4,7 @@ kafka:
   enabled: true
 config:
   port: 80
-  waspSensorType: wasp-payload-parser-template
+  waspSensorType: detiPower
   logLevel: info
   kafkajsLogLevel: nothing
 
@@ -12,7 +12,6 @@ config:
   kafkaBrokers: null
   # kafka topic configuration
   kafkaReadingsTopic: readings
-  kafkaEventsTopic: events
   kafkaPayloadRoutingPrefix: payloads
   kafkaPayloadsReplicationFactor: 1
   kafkaPayloadsPartitions: 5
@@ -21,7 +20,7 @@ config:
     thingServiceName: wasp-thing-service
     thingServicePort: 80
 image:
-  repository: ghcr.io/digicatapult/wasp-payload-parser-template
+  repository: ghcr.io/digicatapult/wasp-deti-power
   pullPolicy: IfNotPresent
-  tag: 'v0.0.4'
+  tag: 'v0.0.5'
   pullSecrets: ['ghcr-digicatapult']

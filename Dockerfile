@@ -8,7 +8,7 @@ FROM node:14.16.0-alpine
 ARG LOGLEVEL
 ENV NPM_CONFIG_LOGLEVEL ${LOGLEVEL}
 
-WORKDIR /wasp-payload-parser-template
+WORKDIR /wasp-deti-power
 
 # Install base dependencies
 COPY . .
