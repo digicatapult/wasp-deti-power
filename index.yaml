@@ -1,0 +1,28 @@
+apiVersion: v1
+entries:
+  wasp-deti-power:
+  - apiVersion: v2
+    appVersion: 0.0.5
+    created: "2021-10-14T11:33:17.893759644Z"
+    dependencies:
+    - condition: kafka.enabled
+      name: kafka
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.7.3
+    - alias: waspthingmock
+      condition: waspthingmock.enabled
+      name: nginx
+      repository: https://charts.bitnami.com/bitnami
+      version: ^8.7.1
+    description: A Helm chart for wasp-deti-power
+    digest: 33b5c7b652221769cdb6fcaee04f3073bc884c54a3e4089cf21f47b7250282b8
+    maintainers:
+    - email: opensource@digicatapult.org.uk
+      name: digicatapult
+      url: www.digicatapult.org.uk
+    name: wasp-deti-power
+    type: application
+    urls:
+    - https://digicatapult.github.io/wasp-deti-power/wasp-deti-power-0.0.5.tgz
+    version: 0.0.5
+generated: "2021-10-14T11:33:17.882303103Z"
