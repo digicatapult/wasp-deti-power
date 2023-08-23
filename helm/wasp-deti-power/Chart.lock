@@ -1,9 +1,0 @@
-dependencies:
-- name: kafka
-  repository: https://charts.bitnami.com/bitnami
-  version: 12.7.3
-- name: nginx
-  repository: https://charts.bitnami.com/bitnami
-  version: 8.9.0
-digest: sha256:65da4d42df91ea486be3d92a0d0ba97a52f45aa04524a9c6a914b4abbfe20412
-generated: "2021-05-07T11:00:24.167563+01:00"

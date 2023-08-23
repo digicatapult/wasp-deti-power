@@ -1,5 +1,7 @@
-const { buildService } = require('@digicatapult/wasp-payload-processor')
-const { WASP_SENSOR_TYPE } = require('./env')
+import { buildService } from '@digicatapult/wasp-payload-processor'
+import env from './env.js'
+
+const { WASP_SENSOR_TYPE } = env
 
 const payloadProcessor =
   ({ logger }) =>
@@ -66,9 +68,7 @@ const snakeCase = (str) => {
     .toLowerCase()
 }
 
-const { startServer, createHttpServer } = buildService({
+export const { startServer, createHttpServer } = await buildService({
   sensorType: WASP_SENSOR_TYPE,
   payloadProcessor,
 })
-
-module.exports = { startServer, createHttpServer }

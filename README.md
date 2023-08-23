@@ -58,31 +58,3 @@ The following environment variables configure the use of [`wasp-payload-processo
 | KAFKA_READINGS_TOPIC        |    N     |   `readings`    | Outgoing Kafka topic for readings                                                       |
 | KAFKA_PAYLOAD_ROUTING_PREFIX|    N     |   `payloads`    | Prefix for incoming Kafka topics for payloads                                           |
 
-## Helm/Kubernetes
-
-Install `minikube` and `helm` using Homebrew, then start `minikube` and update helm dependencies:
-```
-brew install minikube helm
-minikube start
-helm dependency update helm/wasp-deti-power
-```
-
-Eval is required to provide helm with visibility for your local docker image repository:
-```
-eval $(minikube docker-env)
-```
-
-Build the docker image (change `src=` to point to your local github token):
-```
-DOCKER_BUILDKIT=1 docker build -t wasp-deti-power:latest --secret id=github,src=<path/to/your/github_token> .
-```
-
-To run/deploy the application on kubernetes via helm charts use the following `ct-values.yaml` with the corresponding overrides:
-```
-helm install wasp-deti-power helm/wasp-deti-power -f helm/wasp-deti-power/ci/ct-values.yaml
-```
-
-Check the pods are running successfully using:
-```
-kubectl get pods -A
-```

@@ -1,8 +1,11 @@
-const { describe, before, it } = require('mocha')
-const { setupServer } = require('./helpers/server')
-const setupKafka = require('./helpers/kafka')
-const { assertReadings } = require('./helpers/readings')
-const { WASP_SENSOR_TYPE } = require('../../app/env')
+import { describe, before, it } from 'mocha'
+import { setupServer } from './helpers/server.js'
+import setupKafka from './helpers/kafka.js'
+import { assertReadings } from './helpers/readings.js'
+import env from '../../app/env.js'
+import payloads from './data/payloads.js'
+
+const { WASP_SENSOR_TYPE } = env
 
 const {
   READING_PAYLOAD_1,
@@ -10,7 +13,7 @@ const {
   TIMER_PAYLOAD,
   NO_ASSET_NAME_PAYLOAD,
   METRIC_WITHOUT_TIMESTAMP_PAYLOAD,
-} = require('./data/payloads')
+} = payloads
 
 describe('message Processing', function () {
   const context = {}
