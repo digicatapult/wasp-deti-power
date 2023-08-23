@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   READING_PAYLOAD_1: {
     message: {
       key: '00000000-0000-0000-0000-000000000000',

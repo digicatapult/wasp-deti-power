@@ -1,6 +1,6 @@
-const { expect } = require('chai')
+import { expect } from 'chai'
 
-const assertReadings = (actualResult, expectedResult) => {
+export const assertReadings = (actualResult, expectedResult) => {
   actualResult.sort(sortReadings)
   expectedResult.sort(sortReadings)
   expect(actualResult).to.deep.equal(expectedResult)
@@ -12,8 +12,4 @@ const sortReadings = (a, b) => {
   } else {
     return 1
   }
-}
-
-module.exports = {
-  assertReadings,
 }
