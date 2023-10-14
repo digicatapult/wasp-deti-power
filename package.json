@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/wasp-deti-power",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "type": "module",
   "description": "Payload processing service for WASP",
   "main": "app/index.js",
@@ -39,7 +39,7 @@
     "depcheck": "^1.4.6",
     "eslint": "^8.51.0",
     "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-prettier": "^5.0.1",
     "kafkajs": "^2.2.4",
     "mocha": "^10.2.0",
     "nodemon": "^3.0.1",
