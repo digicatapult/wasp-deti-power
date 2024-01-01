@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/wasp-deti-power",
-  "version": "1.0.39",
+  "version": "1.0.40",
   "type": "module",
   "description": "Payload processing service for WASP",
   "main": "app/index.js",
@@ -30,22 +30,22 @@
   },
   "homepage": "https://github.com/digicatapult/wasp-deti-power#readme",
   "dependencies": {
-    "@digicatapult/wasp-payload-processor": "^1.1.73",
+    "@digicatapult/wasp-payload-processor": "^1.1.80",
     "dotenv": "^16.3.1",
     "envalid": "^7.3.1"
   },
   "devDependencies": {
     "chai": "^4.3.10",
     "depcheck": "^1.4.7",
-    "eslint": "^8.55.0",
+    "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-prettier": "^5.1.2",
     "kafkajs": "^2.2.4",
     "mocha": "^10.2.0",
     "nodemon": "^3.0.2",
     "c8": "^8.0.1",
     "pino-colada": "^2.2.2",
-    "prettier": "^3.1.0",
+    "prettier": "^3.1.1",
     "supertest": "^6.3.3"
   }
 }
