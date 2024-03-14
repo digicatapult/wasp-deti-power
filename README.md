@@ -1,5 +1,9 @@
 # wasp-deti-power
 
+## Deprecation Notice
+`WASP` was deprecated on March 14th 2024, there will be no further dependency or security updates to this platform.
+---
+
 Uses [`wasp-payload-processor`](https://github.com/digicatapult/wasp-payload-processor) to build a payload processing service for Schneider power meters.
 
 Example payload:
